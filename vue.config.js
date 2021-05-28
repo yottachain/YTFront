@@ -31,8 +31,8 @@ module.exports = {
   productionSourceMap: false,
   devServer: {
     open: true,
-    host: '127.0.0.1',
-    port: 18090,
+    host: 'localhost',
+    port: 8080,
     https: false,
     // 以上的ip和端口是我们本机的;下面为需要跨域的
     proxy: {// 配置跨域
