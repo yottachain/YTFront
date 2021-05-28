@@ -1,0 +1,76 @@
+<template>
+  <div class="dashboard-container">
+    <div class="main-title">有权访问数据列表</div>
+    <el-table :data="tableData" border style="width: 100%">
+      <el-table-column prop="TabId" label="序号" width="180"> </el-table-column>
+      <el-table-column prop="TabComment" label="表名"> </el-table-column>
+      <el-table-column prop="name" label="操作" width="180">
+        <template slot-scope="scope">
+          <el-button
+            type="primary"
+            size="small"
+            @click="goDetail(scope.$index, scope.row)"
+            >详情</el-button
+          >
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :total="num"
+      class="fenye"
+      :current-page="page"
+      @current-change="getList"
+    >
+    </el-pagination>
+  </div>
+</template>
+
+<script>
+import { getTabList } from "@/api/table";
+export default {
+  name: "Dashboard",
+  data() {
+    return {
+      page: 1,
+      tableData: [],
+      num: 1,
+    };
+  },
+  methods: {
+    goDetail(index, row) {
+      this.$router.push({ path: "/detail", query: { id: row.TabId } }); //页面跳转到详情页的时候 把这条数据ID穿过去
+    },
+    getList() {
+      let parmas = {
+        page: this.page,
+        pageSize: 10,
+      };
+      getTabList(parmas)
+        .then((res) => {
+          this.tableData = res;
+          this.num = this.tableData.length/10;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  },
+  mounted() {
+    this.getList();
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.dashboard {
+}
+.main-title {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+.fenye {
+  margin-top: 20px;
+}
+</style>

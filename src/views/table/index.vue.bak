@@ -1,0 +1,151 @@
+<template>
+  <div class="app-container">
+    <div class="main-title">员工工资表详情 - 有权访问数据的记录和字段</div>
+    <el-table :data="tableData" border style="width: 100%">
+      <!-- 遍历列名 -->
+      <el-table-column
+        :label="item.FieldComment"
+        :prop="item.FieldName"
+        v-for="item in title"
+        :key="item.id"
+      >
+        <!--判断是不是文件 如果是文件的就显示下载按钮  不是文件的显示相应的数据 -->
+        <template slot-scope="scope" v-if="item.FieldType == 'file'">
+          <el-button
+            type="primary"
+            size="small"
+            @click="goDetail(scope.$index, scope.row)"
+            >下载文件</el-button
+          >
+        </template>
+        <template slot-scope="scope" v-else
+          >{{ scope.row[item.FieldComment] }}
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :total="1000"
+      class="fenye"
+      :current-page="page"
+    >
+    </el-pagination>
+  </div>
+</template>
+
+<script>
+import { getTitle, getList } from "@/api/table";
+
+export default {
+  data() {
+    return {
+      tabId: "",
+      page: 1,
+      title: [
+        //都是假数据  到时候接口返回数据 可以删了 留一个title: [] 就行
+        {
+          FieldComment: "文件ID",
+          FieldName: "ID",
+          FieldType: "int32",
+          Primarykey: true,
+          Allow: false,
+        },
+        {
+          FieldComment: "作者",
+          FieldName: "Author",
+          FieldType: "string",
+          Primarykey: false,
+          Allow: false,
+        },
+        {
+          FieldComment: "插入时间",
+          FieldName: "CreateTime",
+          FieldType: "int64",
+          Primarykey: false,
+          Allow: false,
+        },
+        {
+          FieldComment: "文件内容",
+          FieldName: "FileLocation",
+          FieldType: "file",
+          Primarykey: false,
+          Allow: false,
+        },
+      ],
+      tableData: [
+        //都是假数据  到时候接口返回数据 可以删了 留一个tableData: [] 就行
+        {
+          date: "2016-05-02",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1518 弄",
+        },
+        {
+          date: "2016-05-04",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1517 弄",
+        },
+        {
+          date: "2016-05-01",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1519 弄",
+        },
+        {
+          date: "2016-05-03",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1516 弄",
+        },
+      ],
+    };
+  },
+  created() {
+    //页面加载前获取上个页面传过来的ID 用于查询详情
+    if (this.$route.query && this.$route.query.tabId) {
+      this.tabId = this.$route.query.tabId;
+    }
+    this.getTitleList();
+  },
+  methods: {
+    getTitleList() {
+      //先注掉了 不然报错返回登录页
+      // let parmas = { //参数 具体有几个参数你自己加
+      //   tabId: this.tabId,
+      // };
+      // getTitle()
+      //   .then((res) => {
+      //     this.tableData = res.data.list; //获取到的list放入表格list
+      // this.getTableList()
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
+    },
+    getTableList() {
+      //先注掉了 不然报错返回登录页
+      // let parmas = {   //参数
+      //   tabId: this.tabId,
+      //   page: this.page,
+      //   pageSize: 10,
+      // };
+      // getList(parmas)
+      //   .then((res) => {
+      //     this.tableData = res.data.list; //获取到的list放入表格list
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
+    },
+  },
+};
+</script>
+<style scoped>
+.app-container {
+}
+.main-title {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+.fenye {
+  margin-top: 20px;
+}
+</style>
