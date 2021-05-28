@@ -2,44 +2,38 @@
   <div class="app-container">
     <div class="main-title">
       详情
-      <!--      <template>-->
-      <!--         <el-button-->
-      <!--            type="primary"-->
-      <!--            size="small"-->
-      <!--            @click="dialogVisible=true" style="text-align: right;font-weight:700;font-size: 17px;padding: 7px 10px;">增加记录</el-button>-->
-      <!--       &lt;!&ndash;弹框&ndash;&gt;-->
-      <!--          <el-dialog title="增加记录" :visible.sync="dialogVisible" :close-on-click-modal="true" :modal="true" :show-close="true" :center="true">-->
-      <!--          <el-form :model="newForm"  :rules="rules1" ref="newForm" :label-width="formLabelWidth">-->
-      <!--          <el-form-item label="厂家名称" prop="nickName">-->
-      <!--            <el-input  auto-complete="off" style="width:70%;"></el-input>-->
-      <!--          </el-form-item>-->
-      <!--          <el-form-item label="账号" prop="userAccount">-->
-      <!--            <el-input  @blur="checkName" auto-complete="off" style="width:70%;"></el-input>-->
-      <!--          </el-form-item>-->
+            <template>
+               <el-button
+                  type="primary"
+                  size="small"
+                  @click="dialogVisible=true" style="text-align: right;font-weight:700;font-size: 17px;padding: 7px 10px;">增加记录</el-button>
+             <!--弹框-->
+              <el-dialog title="增加记录" :visible.sync="dialogVisible" :close-on-click-modal="true" :modal="true" :show-close="true" :top="'%1'">
+                <el-form :label-position="labelPosition" label-width="100px">
+                <el-form-item :label="item.FieldComment" v-for="item in title" :key="item.FieldName">
+                  <el-input v-model="item.assign"  v-if="item.FieldType != 'file'"></el-input>
+                  <el-upload
+                    v-else
+                    class="upload-demo"
+                    action="https://jsonplaceholder.typicode.com/posts/"
+                    :on-preview="handlePreview"
+                    :on-remove="handleRemove"
+                    :before-remove="beforeRemove"
+                    multiple
+                    :limit="3"
+                    :on-exceed="handleExceed"
+                    :file-list="fileList">
+                    <el-button size="small" type="primary">点击上传</el-button>
+                  </el-upload>
+                </el-form-item>
+                </el-form>
+                  <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" @click="insert()">保 存</el-button>
+                    <el-button @click="dialogVisible  = false">取 消</el-button>
+                  </div>
 
-      <!--          <el-form-item label="实体店最大数量" prop="maxNumber">-->
-      <!--            <el-input  auto-complete="off" style="width:70%;"></el-input>-->
-      <!--          </el-form-item>-->
-      <!--          <el-form-item label="到期时间" prop="useTime">-->
-      <!--              <el-date-picker-->
-
-      <!--                format="yyyy-MM-dd"-->
-      <!--                style="width:70%;"-->
-      <!--                type="date"-->
-      <!--                placeholder="选择日期">-->
-      <!--              </el-date-picker>-->
-      <!--          </el-form-item>-->
-      <!--          <el-form-item label="备注">-->
-      <!--            <el-input auto-complete="off" style="width:70%;"></el-input>-->
-      <!--          </el-form-item>-->
-      <!--        </el-form>-->
-      <!--        <div slot="footer" class="dialog-footer">-->
-      <!--          <el-button type="primary">保 存</el-button>-->
-      <!--          <el-button>取 消</el-button>-->
-      <!--        </div>-->
-
-      <!--         </el-dialog>-->
-      <!--      </template>-->
+             </el-dialog>
+            </template>
       <div class="back" @click="goBack"><返回列表页</div>
 
     </div>
@@ -79,7 +73,9 @@ export default {
       page: 1,
       num: 1,
       title: [],
-      tableData: []
+      tableData: [],
+    fileList:[],
+      labelPosition:'left'
     }
   },
   created() {
@@ -91,6 +87,18 @@ export default {
   },
 
   methods: {
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    handlePreview(file) {
+      console.log(file);
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+    },
+    beforeRemove(file, fileList) {
+      return this.$confirm(`确定移除 ${ file.name }？`);
+    },
     getTitleList() {
       // 先注掉了 不然报错返回登录页
       // let parmas = this.tabId;
@@ -98,6 +106,10 @@ export default {
       getTitle(this.tabId)
         .then((res) => {
           this.title = res.Fields // 获取到的list放入表格list
+          this.title.forEach(e=>{
+            e.value = ''
+          })
+          console.log(this.title)
           this.getTableList()
         })
         .catch((err) => {
@@ -128,30 +140,34 @@ export default {
     },
     download(item, scope) {
       const parmas = {
-        code: scope.row[item.FieldName],
-        id: this.tabId
+        // code: scope.row[item.FieldName],
+        id: this.tabId,
+        fieldName: item.FieldName
       }
       console.log(parmas)
-      getObject(this.tabId, parmas.id, parmas.code)
+      // getObject(this.tabId, parmas.id, parmas.code)
       // eslint-disable-next-line no-undef
 
-      // getObject(this.tabId, parmas.id, parmas.code).then((res) => {
-      //
-      //   //
-      //   // const blob = new Blob([res])
-      //   // res.headers
-      //   // const fileName = '黄皮书.docx'
-      //   // const link = document.createElement('a')
-      //   // link.download = fileName
-      //   // link.style.display = 'none'
-      //   // link.href = URL.createObjectURL(blob)
-      //   // document.body.appendChild(link)
-      //   // link.click()
-      //   // URL.revokeObjectURL(link.href)
-      //   // document.body.removeChild(link)
-      // }).catch((err) => {
-      //   console.log(err)
-      // })
+      getObject(this.tabId, parmas.id, parmas.fieldName).then((res) => {
+
+        //
+        const blob = new Blob([res])
+        const fileName = scope.row[item.FieldName]
+        const link = document.createElement('a')
+        link.download = fileName
+        link.style.display = 'none'
+        link.href = URL.createObjectURL(blob)
+        document.body.appendChild(link)
+        link.click()
+        URL.revokeObjectURL(link.href)
+        document.body.removeChild(link)
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
+
+    insert(){
+      let fd = new FormData()
     }
 
   }

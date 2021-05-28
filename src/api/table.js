@@ -21,22 +21,20 @@ export function getList(params, tabId) {
   })
 }
 
-export function getObject(tabId, id, code) {
-  // return request({
-  //   url: `/${tabId}/down?id=${id}&code=${code}`,
-  //   method: 'get',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  //   responseType: 'arraybuffer',
-  //   type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document;charset=utf-8',
-  // })
-  let url
-  let token
-  token = getToken()
-  url= `/${tabId}/down?id=${id}&code=${code}&token=${token}`
-  window.location.href = url
+export function getObject(tabId, id, fieldname) {
+  return request({
+    url: `/${tabId}/down?id=${id}&fieldname=${fieldname}`,
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    responseType: 'arraybuffer',
+    type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document;charset=utf-8',
+  })
   // let url
-  // url = 'localhost:8080/${tabId}/down?id=${id}&code=${code}`
-  // window.open(url, '_blank');
+  // let token
+  // token = getToken()
+  // url= `/${tabId}/down?id=${id}&code=${code}&token=${token}`
+  // window.location.href = url
+
 }
