@@ -38,3 +38,20 @@ export function getObject(tabId, id, fieldname) {
   // window.location.href = url
 
 }
+
+export function insert(tabId,params) {
+  return request({
+    url:`/${tabId}/insert`,
+    method: 'post',
+    params
+  })
+}
+//
+// export function insert(params) {
+//   return request({
+//     // url: '/vue-admin-template/user/login',  //登陆过接口地址
+//     url:'/login',
+//     method: 'get',
+//     params
+//   })
+// }

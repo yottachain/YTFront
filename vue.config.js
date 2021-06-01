@@ -39,6 +39,7 @@ module.exports = {
       '/': {
         // target: 'http://phs.yottachain.net:8088',
         target: 'http://117.161.72.89:8020/',
+        // target:'localhost:8020',
         ws: false,
         changOrigin: true,
         pathRewrite: {

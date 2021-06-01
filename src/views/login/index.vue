@@ -41,7 +41,7 @@ export default {
           if(res) {
             localStorage.setItem('Authorization', res.access_token);//登陆成功 获取token 存到localstorage
 
-            this.$router.push({ path: this.redirect || '/' });  //跳转到首页
+            this.$router.push({ path:'/dashboard' });  //跳转到首页
           }
           console.log('uid===',username)
           localStorage.setItem('uid',username)
@@ -49,6 +49,7 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+          this.$router.push({ path:'#/login/index' });
         });
       // localStorage.setItem('token', "222"); // 下面这两个 登陆接口成功之后可以注掉
       // this.$router.push({ path: this.redirect || "/" });

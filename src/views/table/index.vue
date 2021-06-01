@@ -10,8 +10,9 @@
              <!--弹框-->
               <el-dialog title="增加记录" :visible.sync="dialogVisible" :close-on-click-modal="true" :modal="true" :show-close="true" :top="'%1'">
                 <el-form :label-position="labelPosition" label-width="100px">
-                <el-form-item :label="item.FieldComment" v-for="item in title" :key="item.FieldName">
-                  <el-input v-model="item.assign"  v-if="item.FieldType != 'file'"></el-input>
+                <el-form-item :label="item.FieldComment" v-for="(item,index) in title" :key="item.FieldName">
+                  <el-input v-model="dataModel[item.FieldName]"  v-if="item.FieldType != 'file'"> </el-input>
+
                   <el-upload
                     v-else
                     class="upload-demo"
@@ -28,7 +29,7 @@
                 </el-form-item>
                 </el-form>
                   <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="insert()">保 存</el-button>
+                    <el-button type="primary" @click="onSubmit()">保 存</el-button>
                     <el-button @click="dialogVisible  = false">取 消</el-button>
                   </div>
 
@@ -63,7 +64,8 @@
 </template>
 
 <script>
-import { getTitle, getList, getObject } from '@/api/table'
+import {getTitle, getList, getObject, insert} from '@/api/table'
+import {login} from "@/api/user";
 
 export default {
   data() {
@@ -74,8 +76,9 @@ export default {
       num: 1,
       title: [],
       tableData: [],
-    fileList:[],
-      labelPosition:'left'
+      fileList:[],
+      labelPosition:'left',
+      dataModel:[]
     }
   },
   created() {
@@ -84,9 +87,33 @@ export default {
       this.tabId = this.$route.query.id
     }
     this.getTitleList()
+    // var len = this.title.length
+    // for (var i=0;i<len;i++) {
+    //   console.log("hahahaha:::::"+this.title[i])
+    // }
   },
 
   methods: {
+
+    onSubmit() {
+      insert(this.tabId,this.form)
+        .then((res) => {
+          if(res) {
+            // localStorage.setItem('Authorization', res.access_token);//登陆成功 获取token 存到localstorage
+
+            this.$router.push({ path:'/dashboard' });  //跳转到首页
+          }
+
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$router.push({ path:'#/login/index' });
+        });
+      // localStorage.setItem('token', "222"); // 下面这两个 登陆接口成功之后可以注掉
+      // this.$router.push({ path: this.redirect || "/" });
+    },
+
+
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
@@ -105,11 +132,15 @@ export default {
       console.log('tabId::::', this.tabId)
       getTitle(this.tabId)
         .then((res) => {
+
           this.title = res.Fields // 获取到的list放入表格list
+          // console.log("titl000000000e"+this.title)
           this.title.forEach(e=>{
-            e.value = ''
+            // this.dataModel.push(e.FieldName)
+            // e.value = ''
+            this.dataModel[e.FieldName] = ''
           })
-          console.log(this.title)
+          console.log("dataModel:::"+this.dataModel)
           this.getTableList()
         })
         .catch((err) => {
