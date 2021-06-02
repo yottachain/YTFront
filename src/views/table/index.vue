@@ -15,8 +15,10 @@
 
                   <el-upload
                     v-else
-                    class="upload-demo"
+                    class="upload"
                     action="https://jsonplaceholder.typicode.com/posts/"
+                    :auto-upload="false"
+                    :on-change="handleChange"
                     :on-preview="handlePreview"
                     :on-remove="handleRemove"
                     :before-remove="beforeRemove"
@@ -112,13 +114,20 @@ export default {
       // localStorage.setItem('token', "222"); // 下面这两个 登陆接口成功之后可以注掉
       // this.$router.push({ path: this.redirect || "/" });
     },
+    handleChange (file, fileList) {
+      this.fileListCache = fileList;
+    },
 
 
     handleRemove(file, fileList) {
       console.log(file, fileList);
+      this.total--;
+      this.handleChange(file, fileList);
+
     },
     handlePreview(file) {
       console.log(file);
+      this.handlePreview(file)
     },
     handleExceed(files, fileList) {
       this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
