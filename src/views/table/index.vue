@@ -103,28 +103,24 @@ export default {
       let fd = new FormData()
       this.title.forEach(e=>{
         // this.dataModel.push(e.FieldName)
-        console.log("lalalalla::::"+this.dataModel[e.FieldName])
-        console.log("e.FieldName::::"+e.FieldName)
-        fd.append(e.FieldName,this.dataModel[e.FiledName])
-
+        // console.log("lalalalla::::"+this.dataModel[e.FieldName])
+        console.log("key:::"+e.FieldName + " ,value::::"+this.dataModel[e.FieldName])
+        fd.append(e.FieldName,this.dataModel[e.FieldName])
+        // fd[e.FieldName] = this.dataModel[e.FieldName]
       })
 
-      // for (var i=0;i<this.dataModel.length;i++) {
-      //   console.log(this.dataModel[i])
-      //   fd.append(this.dataModel[i],this.dataModel[i])
-      // }
       insert(this.tabId,fd)
         .then((res) => {
           if(res) {
             // localStorage.setItem('Authorization', res.access_token);//登陆成功 获取token 存到localstorage
 
-            this.$router.push({ path:'/dashboard' });  //跳转到首页
+            this.$router.push({ path:'#/detail' });  //跳转到首页
           }
 
         })
         .catch((error) => {
           console.log(error);
-          this.$router.push({ path:'#/login/index' });
+          this.$router.push({ path:'#/detail' });
         });
       // localStorage.setItem('token', "222"); // 下面这两个 登陆接口成功之后可以注掉
       // this.$router.push({ path: this.redirect || "/" });
@@ -176,15 +172,16 @@ export default {
       const parmas = { // 参数
         tabId: this.tabId,
         page: this.page,
-        pageSize: 10,
+        pageSize: 20,
         startid: 1,
-        limit: 10
+        limit: 100
       }
       getList(parmas, this.tabId)
         .then((res) => {
           this.tableData = res // 获取到的list放入表格list
           console.log('tableData::::', this.tableData)
           this.num = this.tableData.length / 10
+          console.log("this.num"+this.num)
         })
         .catch((err) => {
           console.log(err)

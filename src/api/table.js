@@ -39,14 +39,14 @@ export function getObject(tabId, id, fieldname) {
 
 }
 
-export function insert(tabId,params) {
+export function insert(tabId,formData) {
   return request({
     url:`/${tabId}/insert`,
     method: 'post',
     headers: {
       'Content-Type': 'multipart/form-data'
     },
-    params
+    data:formData
   })
 }
 //
