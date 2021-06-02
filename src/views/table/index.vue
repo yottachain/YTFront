@@ -11,7 +11,7 @@
               <el-dialog title="增加记录" :visible.sync="dialogVisible" :close-on-click-modal="true" :modal="true" :show-close="true" :top="'%1'">
                 <el-form :label-position="labelPosition" label-width="100px">
                 <el-form-item :label="item.FieldComment" v-for="(item,index) in title" :key="item.FieldName">
-                  <el-input v-model="dataModel[item.FieldName]" :placeholder="item.FieldType" v-if="item.FieldType != 'file'"> </el-input>
+                  <el-input v-model="dataModel[item.FieldName]"  :placeholder="item.FieldType" v-if="item.FieldType != 'file'"> </el-input>
 
                   <el-upload
                     v-else
@@ -100,7 +100,20 @@ export default {
   methods: {
 
     onSubmit() {
-      insert(this.tabId,this.form)
+      let fd = new FormData()
+      this.title.forEach(e=>{
+        // this.dataModel.push(e.FieldName)
+        console.log("lalalalla::::"+this.dataModel[e.FieldName])
+        console.log("e.FieldName::::"+e.FieldName)
+        fd.append(e.FieldName,this.dataModel[e.FiledName])
+
+      })
+
+      // for (var i=0;i<this.dataModel.length;i++) {
+      //   console.log(this.dataModel[i])
+      //   fd.append(this.dataModel[i],this.dataModel[i])
+      // }
+      insert(this.tabId,fd)
         .then((res) => {
           if(res) {
             // localStorage.setItem('Authorization', res.access_token);//登陆成功 获取token 存到localstorage
@@ -147,7 +160,7 @@ export default {
           this.title = res.Fields // 获取到的list放入表格list
           // console.log("titl000000000e"+this.title)
           this.title.forEach(e=>{
-            this.dataModel.push(e.FieldName)
+            // this.dataModel.push(e.FieldName)
             e.value = ''
             // this.dataModel[e.FieldName] = ''
           })

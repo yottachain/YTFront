@@ -43,6 +43,9 @@ export function insert(tabId,params) {
   return request({
     url:`/${tabId}/insert`,
     method: 'post',
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
     params
   })
 }
