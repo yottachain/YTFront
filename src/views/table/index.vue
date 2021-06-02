@@ -11,7 +11,7 @@
               <el-dialog title="增加记录" :visible.sync="dialogVisible" :close-on-click-modal="true" :modal="true" :show-close="true" :top="'%1'">
                 <el-form :label-position="labelPosition" label-width="100px">
                 <el-form-item :label="item.FieldComment" v-for="(item,index) in title" :key="item.FieldName">
-                  <el-input v-model="dataModel[item.FieldName]"  v-if="item.FieldType != 'file'"> </el-input>
+                  <el-input v-model="dataModel[item.FieldName]" :placeholder="item.FieldType" v-if="item.FieldType != 'file'"> </el-input>
 
                   <el-upload
                     v-else
@@ -80,7 +80,9 @@ export default {
       tableData: [],
       fileList:[],
       labelPosition:'left',
-      dataModel:[]
+      dataModel:[],
+      form: {
+      },
     }
   },
   created() {
@@ -145,9 +147,9 @@ export default {
           this.title = res.Fields // 获取到的list放入表格list
           // console.log("titl000000000e"+this.title)
           this.title.forEach(e=>{
-            // this.dataModel.push(e.FieldName)
-            // e.value = ''
-            this.dataModel[e.FieldName] = ''
+            this.dataModel.push(e.FieldName)
+            e.value = ''
+            // this.dataModel[e.FieldName] = ''
           })
           console.log("dataModel:::"+this.dataModel)
           this.getTableList()
