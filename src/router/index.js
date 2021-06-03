@@ -56,7 +56,7 @@ export const constantRoutes = [
     children: [{
       path: 'table',
       name: 'Table',
-      component: () => import('@/views/table/index'),
+      component: () => import('@/views/table/index.vue'),
       meta: { title: '列表', icon: 'table' }
     }]
   },
