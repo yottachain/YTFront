@@ -39,13 +39,28 @@ export function getObject(tabId, id, fieldname) {
 
 }
 
+export function deleteData(tabId,id){
+  return request({
+    url: `/${tabId}/delete?id=${id}`,
+    method: 'get',
+  })
+}
+
+export function updateData(tabId,formData) {
+  return request({
+    url: `/${tabId}/update`,
+    method: 'post',
+    data:formData
+  })
+}
+
 export function insert(tabId,formData) {
   return request({
     url:`/${tabId}/insert`,
     method: 'post',
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    },
+    // headers: {
+    //   'Content-Type': 'multipart/form-data'
+    // },
     data:formData
   })
 }

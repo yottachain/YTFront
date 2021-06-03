@@ -12,7 +12,7 @@
         <el-input v-model="form.uid"></el-input>
       </el-form-item>
       <el-form-item label="密码">
-        <el-input v-model="form.secret_key"></el-input>
+        <el-input v-model="form.secret_key" type="password"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" class="login-btn" @click="onSubmit(form.uid)"
