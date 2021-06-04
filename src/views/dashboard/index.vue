@@ -12,9 +12,39 @@
             @click="goDetail(scope.$index, scope.row)"
             >详情</el-button
           >
+          <el-button
+            type="primary"
+            size="small"
+            @click="authTable(scope.$index, scope.row)"
+          >授权</el-button>
         </template>
       </el-table-column>
     </el-table>
+
+    <el-dialog title="授权"
+               :visible.sync="authVisible"
+               :close-on-click-modal="true"
+               :modal="true"
+               :show-close="true">
+      <el-form
+        ref="form"
+        :model="form"
+        label-width="80px"
+
+      >
+        <el-form-item label="用户名">
+          <el-input v-model="username"></el-input>
+        </el-form-item>
+
+      </el-form>
+      <div slot="footer"
+           class="dialog-footer">
+        <el-button type="primary"
+                   @click="onSubmitUpdataData()">确认</el-button>
+        <el-button @click="authVisible  = false">取 消</el-button>
+      </div>
+
+    </el-dialog>
     <el-pagination
       background
       layout="prev, pager, next"
@@ -36,11 +66,16 @@ export default {
       page: 1,
       tableData: [],
       num: 1,
+      authVisible:false,
+      username:""
     };
   },
   methods: {
     goDetail(index, row) {
       this.$router.push({ path: "/detail", query: { id: row.TabId } }); //页面跳转到详情页的时候 把这条数据ID穿过去
+    },
+    authTable(){
+      this.authVisible = true
     },
     getList() {
       let parmas = {
