@@ -40,7 +40,7 @@ export const constantRoutes = [
     path: '/',
     requireAuth: true,
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/login',
     children: [{
       path: 'dashboard',
       name: '首页',

@@ -64,12 +64,10 @@ export function insert(tabId,formData) {
     data:formData
   })
 }
-//
-// export function insert(params) {
-//   return request({
-//     // url: '/vue-admin-template/user/login',  //登陆过接口地址
-//     url:'/login',
-//     method: 'get',
-//     params
-//   })
-// }
+
+export function auth(tabId,username) {
+  return request({
+    url:`/${tabId}/auth?username=`+username,
+    method: 'get',
+  })
+}
